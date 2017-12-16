@@ -98,7 +98,7 @@ var TaskCommand = exports.TaskCommand = function () {
       var tasks = [(0, _assign2.default)({
         root: true,
         tasks: {}
-      }, this.tasks)];
+      }, typeof this.tasks === 'function' ? this.tasks(parsed) : this.tasks)];
 
       var callHelp = void 0;
 
@@ -110,7 +110,8 @@ var TaskCommand = exports.TaskCommand = function () {
           logger.log('TaskCommmand(' + _this.id + ')#eval::callHelp', callHelp);
         } else {
           var last = tasks[tasks.length - 1];
-          var sub = last.tasks && last.tasks[arg];
+          var lastTasks = last.tasks;
+          var sub = lastTasks && (typeof lastTasks === 'function' ? lastTasks(parsed, arg) : lastTasks[arg]);
 
           if (sub) {
             logger.log('TaskCommmand(' + _this.id + ')#eval:match::arg', arg);

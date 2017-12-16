@@ -56,7 +56,7 @@ export class TaskCommand {
     const tasks = [Object.assign({
       root: true,
       tasks: {}
-    }, this.tasks)]
+    }, typeof this.tasks === 'function' ? this.tasks(parsed) : this.tasks)]
 
     let callHelp
 
@@ -68,7 +68,8 @@ export class TaskCommand {
         logger.log(`TaskCommmand(${this.id})#eval::callHelp`, callHelp)
       } else {
         const last = tasks[tasks.length - 1]
-        const sub = last.tasks && last.tasks[arg]
+        const lastTasks = last.tasks
+        const sub = lastTasks && (typeof lastTasks === 'function' ? lastTasks(parsed, arg) : lastTasks[arg])
 
         if (sub) {
           logger.log(`TaskCommmand(${this.id})#eval:match::arg`, arg)
